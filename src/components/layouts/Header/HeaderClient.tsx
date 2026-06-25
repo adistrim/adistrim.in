@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
     { path: "/", label: "Home" },
     { path: "/now", label: "Now" },
-    { path: "/blog", label: "Blogs" },
+    // { path: "/blog", label: "Blogs" }, // disabled: Hashnode GraphQL API moved to paid
 ];
 
 export default function HeaderClient() {
