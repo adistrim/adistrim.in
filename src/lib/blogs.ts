@@ -1,52 +1,45 @@
 import { ENV } from "@/config";
-import { CONFIG, EXTERNAL_API } from "@/constants";
+import { BlogApiResponse, BlogPost } from "@/types/blog.type";
 
-function buildQuery(count: number) {
-  return `
-    query Publication {
-      publication(host: "${CONFIG.blogHost}") {
-        posts(first: ${count}) {
-          edges {
-            node {
-              title
-              subtitle
-              brief
-              url
-              readTimeInMinutes
-              publishedAt
-              coverImage {
-                url
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
+export function formatPublishedAt(publishedAt: string | null): string {
+  if (!publishedAt) {
+    return "Date unavailable";
+  }
+
+  return new Date(publishedAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
-export async function getBlogs(count: number = CONFIG.blogPostsCount) {
-  const query = buildQuery(count);
+export async function getBlogs(count: number = 5): Promise<BlogPost[]> {
+  if (!ENV.base || !ENV.secret || !ENV.apiKey) {
+    throw new Error(
+      "Missing env vars: BLOG_SITE_URL, BLOG_SECRET_PATH, or BLOG_API_KEY"
+    );
+  }
 
-  const res = await fetch(EXTERNAL_API.hashnodeGql, {
-    method: "POST",
+  const res = await fetch(`${ENV.base}/api/${ENV.secret}/blog?count=${count}`, {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${ENV.hashnodeApiKey}`
+      "x-api-key": ENV.apiKey,
     },
-    body: JSON.stringify({ query }),
-    next: { revalidate: 86400 }
+    next: { revalidate: 86400 },
   });
 
-  const json = await res.json();
-  return json.data.publication.posts.edges.map((e: any) => e.node);
+  if (!res.ok) {
+    throw new Error(`Blog fetch failed: ${res.status} ${res.statusText}`);
+  }
+
+  const json: BlogApiResponse = await res.json();
+  return json.publication.posts.edges.map((edge) => edge.node);
 }
 
-export async function getLatestBlogPost() {
+export async function getLatestBlogPost(): Promise<BlogPost | null> {
   try {
-    const blog = await getBlogs();
-    return blog[0] || null;
-  } catch {
+    const blogs = await getBlogs(1);
+    return blogs[0] || null;
+  } catch (err) {
     return null;
   }
 }

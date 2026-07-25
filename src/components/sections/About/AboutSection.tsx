@@ -1,4 +1,4 @@
-// import LatestBlogPost from "./LatestBlogPost"; // disabled: Hashnode GraphQL API moved to paid
+import LatestBlogPost from "./LatestBlogPost";
 import { InstitutionLink } from "./InstitutionLink";
 import Link from "next/link";
 
@@ -77,9 +77,9 @@ export default function AboutSection() {
             </div>
 
             <div className="md:col-span-2 flex flex-col justify-center gap-6">
-                {/* <div>
+                <div>
                     <LatestBlogPost />
-                </div> */}
+                </div>
             </div>
         </div>
     );

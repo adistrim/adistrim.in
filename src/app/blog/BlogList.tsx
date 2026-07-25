@@ -62,7 +62,7 @@ export default async function BlogList() {
                 </div>
 
                 {blog.coverImage?.url && (
-                  <div className="w-full md:w-64 h-36 md:h-auto md:flex-shrink-0">
+                  <div className="w-full md:w-64 h-36 md:h-auto md:shrink-0">
                     <Image
                       src={blog.coverImage.url}
                       alt={blog.title}

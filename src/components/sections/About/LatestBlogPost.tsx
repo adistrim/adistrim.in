@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BookOpen, Clock, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getLatestBlogPost } from "@/lib/blogs";
+import { formatPublishedAt, getLatestBlogPost } from "@/lib/blogs";
 
 export default async function LatestBlogPost() {
   const post = await getLatestBlogPost();
@@ -25,11 +25,7 @@ export default async function LatestBlogPost() {
     );
   }
 
-  const formattedDate = new Date(post.publishedAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+  const formattedDate = formatPublishedAt(post.publishedAt);
 
   return (
     <Card className="w-fit bg-primary-background">
