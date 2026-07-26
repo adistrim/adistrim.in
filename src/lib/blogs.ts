@@ -1,26 +1,14 @@
 import { ENV } from "@/config";
 import { BlogApiResponse, BlogPost } from "@/types/blog.type";
 
-export function formatPublishedAt(publishedAt: string | null): string {
-  if (!publishedAt) {
-    return "Date unavailable";
-  }
-
-  return new Date(publishedAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-export async function getBlogs(count: number = 5): Promise<BlogPost[]> {
+export async function getBlogs(): Promise<BlogPost[]> {
   if (!ENV.base || !ENV.secret || !ENV.apiKey) {
     throw new Error(
       "Missing env vars: BLOG_SITE_URL, BLOG_SECRET_PATH, or BLOG_API_KEY"
     );
   }
 
-  const res = await fetch(`${ENV.base}/api/${ENV.secret}/blog?count=${count}`, {
+  const res = await fetch(`${ENV.base}/api/${ENV.secret}/blog`, {
     headers: {
       "x-api-key": ENV.apiKey,
     },
@@ -37,7 +25,7 @@ export async function getBlogs(count: number = 5): Promise<BlogPost[]> {
 
 export async function getLatestBlogPost(): Promise<BlogPost | null> {
   try {
-    const blogs = await getBlogs(1);
+    const blogs = await getBlogs();
     return blogs[0] || null;
   } catch (err) {
     return null;

@@ -1,7 +1,7 @@
-import dayjs from "dayjs";
 import { GITHUB } from "@/constants";
 import Link from "next/link";
 import { fetchCommits } from "@/lib/github";
+import { formatDate } from "@/lib/date";
 
 export default async function Changelog() {
   const commits = await fetchCommits();
@@ -20,7 +20,7 @@ export default async function Changelog() {
             <li key={commit.sha} className="my-[2rem] dark:text-gray-200">
               <div className="mb-2">
                 <strong>{commit.commit.author.name}</strong> committed on{" "}
-                {dayjs(commit.commit.author.date).format("MMMM D, YYYY")}
+                {formatDate(commit.commit.author.date)}
               </div>
 
               <div className="mb-2 dark:text-gray-400">

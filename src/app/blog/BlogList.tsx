@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import dayjs from "dayjs";
 import { Clock, Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getBlogs } from "@/lib/blogs";
+import { formatDateLong } from "@/lib/date";
 
 const truncateText = (text: string, maxLength: number) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
@@ -48,7 +48,7 @@ export default async function BlogList() {
                   <div className="flex items-center text-sm text-muted-foreground mb-4 space-x-4">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{dayjs(blog.publishedAt).format("MMMM D, YYYY")}</span>
+                      <span>{formatDateLong(blog.publishedAt)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />

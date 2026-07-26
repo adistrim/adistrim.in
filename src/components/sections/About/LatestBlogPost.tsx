@@ -2,7 +2,8 @@ import Link from "next/link";
 import { BookOpen, Clock, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { formatPublishedAt, getLatestBlogPost } from "@/lib/blogs";
+import { getLatestBlogPost } from "@/lib/blogs";
+import { formatDateLong } from "@/lib/date";
 
 export default async function LatestBlogPost() {
   const post = await getLatestBlogPost();
@@ -25,7 +26,7 @@ export default async function LatestBlogPost() {
     );
   }
 
-  const formattedDate = formatPublishedAt(post.publishedAt);
+  const formattedDate = formatDateLong(post.publishedAt);
 
   return (
     <Card className="w-fit bg-primary-background">
